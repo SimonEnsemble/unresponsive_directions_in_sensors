@@ -46,8 +46,34 @@ begin
 end
 
 # ╔═╡ 6c4a7ff0-76fc-11eb-3e87-c71b75c8ebd3
-# names of gases that satisfy requirements, sorted by how many adsorbates they are isothermed in
-gas_names[sortperm(sum(material_gas_matrix, dims=1)[:], rev=true)]
+begin
+	initial_gas_candidate_ids = sortperm(sum(material_gas_matrix, dims=1)[:], rev=true)
+	# names of gases that satisfy requirements, sorted by how many adsorbates they are isothermed in
+	initial_gas_candidates = gas_names[initial_gas_candidate_ids]
+end
+
+# ╔═╡ 42f21322-7797-11eb-1846-3167865e5265
+# water isn't a gas. propylene and ethane aren't that common in the lab.
+disqualified_gas_ids = [i for i ∈ 1:length(gases) if gas_names[i] ∈ ["Water", "Ethane", "Propene"]]
+
+# ╔═╡ a2f3f780-7787-11eb-0db1-19c417563a5d
+# revise gas candidate id list
+begin
+	revised_gas_candidate_ids = [id for id ∈ initial_gas_candidate_ids if !(id ∈ disqualified_gas_ids)]
+	revised_gas_candidates = gas_names[revised_gas_candidate_ids]
+end
+
+# ╔═╡ d91dada2-7797-11eb-3030-5b4bb8aad992
+# let's consider all the gases up to CO (after that, they get weird)
+begin
+	CO_id = findfirst(g->g == "Carbon monoxide", revised_gas_candidates)
+	gas_candidate_ids = revised_gas_candidate_ids[1:CO_id]
+	gas_candidates = gas_names[gas_candidate_ids]
+end
+
+# ╔═╡ a81f6722-7788-11eb-3cc7-7f6d18a64d75
+# materials that have isotherms for all candidate gases
+material_candidates = [m for (i, m) ∈ enumerate(materials) if all(material_gas_matrix[i, gas_candidate_ids] .== 1)]
 
 # ╔═╡ Cell order:
 # ╠═78df6c80-76f7-11eb-3995-05dedb662631
@@ -57,3 +83,7 @@ gas_names[sortperm(sum(material_gas_matrix, dims=1)[:], rev=true)]
 # ╠═09d5252e-76f9-11eb-02e3-ff05abff717d
 # ╠═8f15156e-76f9-11eb-03fc-979d446be28a
 # ╠═6c4a7ff0-76fc-11eb-3e87-c71b75c8ebd3
+# ╠═42f21322-7797-11eb-1846-3167865e5265
+# ╠═a2f3f780-7787-11eb-0db1-19c417563a5d
+# ╠═d91dada2-7797-11eb-3030-5b4bb8aad992
+# ╠═a81f6722-7788-11eb-3cc7-7f6d18a64d75
