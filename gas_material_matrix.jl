@@ -5,7 +5,7 @@ using Markdown
 using InteractiveUtils
 
 # ╔═╡ 78df6c80-76f7-11eb-3995-05dedb662631
-using JSON, HTTP
+using JSON, HTTP, DataFrames, PyPlot
 
 # ╔═╡ bc1d042e-76f7-11eb-3d59-1160a17c3b52
 biblios = JSON.parsefile("biblios.json")
@@ -52,9 +52,6 @@ begin
 	initial_gas_candidates = gas_names[initial_gas_candidate_ids]
 end
 
-# ╔═╡ 73e94a10-7c75-11eb-356a-ab551e22d8ef
-
-
 # ╔═╡ 42f21322-7797-11eb-1846-3167865e5265
 # water isn't a gas. propylene and ethane aren't that common in the lab.
 disqualified_gas_ids = [i for i ∈ 1:length(gases) if gas_names[i] ∈ ["Water", "Ethane", "Propene"]]
@@ -81,7 +78,7 @@ end
 # ╔═╡ 3bd2ec08-7c75-11eb-1df2-91d7445431c4
 begin
 	gases_we_want = [
-		"Carbon Dioxide",
+		#"Carbon Dioxide",
 		"Methane",
 		# "Hydrogen",
 		"Nitrogen",
@@ -151,12 +148,37 @@ begin
 		end
 		return isotherms_we_want
 	end
-	get_isotherm("CuBTC", "Carbon Dioxide")
 end
 
-# ╔═╡ 0c25e8e0-7c7d-11eb-1772-bdda2a6b4be0
-HTTP.request("POST", "http://adsorption.nist.gov/isodb/api/isotherm/10.1002adfm.200500561.Isotherm4.json"
+# ╔═╡ 0e3bd6fe-81f7-11eb-1d10-c9e2a3e11ace
+function get_isotherm_data(filename::String)
+	response = HTTP.request("POST", "https://adsorption.nist.gov/isodb/api/isotherm/$filename.json"
 	)
+	json_response = JSON.parse(String(response.body))
+	df = DataFrame(
+		:P => [datapt["pressure"] for datapt in json_response["isotherm_data"]],
+		:N => [datapt["species_data"][1]["adsorption"]
+			for datapt in json_response["isotherm_data"]]
+	)
+	# convert units to bar, mmol/g
+	
+	return df, json_response["pressureUnits"], json_response["adsorptionUnits"]
+end
+
+# ╔═╡ 783d2e00-81f8-11eb-2bbc-e95e0097171d
+get_isotherm("CuBTC", "Nitrogen")
+
+# ╔═╡ 6a527240-81f9-11eb-3300-3d0e5d22cc30
+df, p_unit, n_unit = get_isotherm_data("10.1021la800803w.Isotherm26")
+
+# ╔═╡ 7acb5d80-81f9-11eb-293d-cd8d13d5bf45
+begin
+	figure()
+	scatter(df.P, df.N)
+	ylabel("Adsorption ($n_unit)")
+	xlabel("Pressure ($p_unit)")
+	gcf()
+end
 
 # ╔═╡ Cell order:
 # ╠═78df6c80-76f7-11eb-3995-05dedb662631
@@ -166,11 +188,13 @@ HTTP.request("POST", "http://adsorption.nist.gov/isodb/api/isotherm/10.1002adfm.
 # ╠═09d5252e-76f9-11eb-02e3-ff05abff717d
 # ╠═8f15156e-76f9-11eb-03fc-979d446be28a
 # ╠═6c4a7ff0-76fc-11eb-3e87-c71b75c8ebd3
-# ╠═73e94a10-7c75-11eb-356a-ab551e22d8ef
 # ╠═42f21322-7797-11eb-1846-3167865e5265
 # ╠═a2f3f780-7787-11eb-0db1-19c417563a5d
 # ╠═d91dada2-7797-11eb-3030-5b4bb8aad992
 # ╠═a81f6722-7788-11eb-3cc7-7f6d18a64d75
 # ╠═3bd2ec08-7c75-11eb-1df2-91d7445431c4
 # ╠═93a1af92-7c79-11eb-30ad-37814e426a28
-# ╠═0c25e8e0-7c7d-11eb-1772-bdda2a6b4be0
+# ╠═0e3bd6fe-81f7-11eb-1d10-c9e2a3e11ace
+# ╠═783d2e00-81f8-11eb-2bbc-e95e0097171d
+# ╠═6a527240-81f9-11eb-3300-3d0e5d22cc30
+# ╠═7acb5d80-81f9-11eb-293d-cd8d13d5bf45
