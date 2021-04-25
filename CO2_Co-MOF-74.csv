@@ -1,5 +1,5 @@
 # 298 K, http://www.rsc.org/suppdata/sc/c3/c3sc51319j/c3sc51319j.pdf Table S3
-p_kPa,n_mol_g
+p(kPa),N(mol/g)
 0.4748,1.56E-04
 0.98,3.13E-04
 1.5038,4.69E-04
