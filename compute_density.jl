@@ -2,7 +2,6 @@ using Xtals
 set_path_to_crystals(pwd())
 
 mof_to_cif = Dict(
-    "Mg-MOF-74" => "VOGTIV_clean_h.cif",
     "HKUST-1" => "FIQCEN_clean.cif",
     "Co-MOF-74" => "ORIWAP_clean.cif"
 )
