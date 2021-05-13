@@ -1,5 +1,5 @@
 using Xtals
-set_path_to_crystals(pwd())
+set_path_to_crystals(joinpath(pwd(), "data", "xtals"))
 
 mof_to_cif = Dict(
     "HKUST-1" => "FIQCEN_clean.cif",
