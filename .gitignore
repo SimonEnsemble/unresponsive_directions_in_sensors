@@ -1,2 +1,3 @@
 *.pdf
+*.npz
 .ipynb_checkpoints/
