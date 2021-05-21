@@ -1,7 +1,7 @@
 from mayavi import mlab
 import numpy as np
 
-mof = "Co-MOF-74"
+mof = "HKUST-1"
 contaminants = ['N2', 'CO2', 'C2H6']
 labels = {'N2': 'nitrogen', 'CO2': 'carbon dioxide', 'C2H6': 'ethane'}
 cool_colors = {'green': (0.0, 0.716, 0.554), 'red': (1.0, 0.403, 0.397), 'blue': (0.0, 0.747, 1.0), "yellow": (0.830929, 0.793470, 0.225663), "purple": (0.745987, 0.663119, 1.000000)}
@@ -12,10 +12,15 @@ X1   = data['X1']
 X2   = data['X2']
 X3   = data['X3']
 M    = data['M']
-v1   = data['v1']
-v2   = data['v2']
-v3   = data['v3']
+v1   = -data['v1'] / 2
+v2   = -data['v2'] / 2
+v3   = -data['v3'] / 2
 x_op = data['x_op']
+
+if mof == "HKUST-1":
+    v1 = -v1
+    v2 = -v2
+    v3 = -v3
 
 mlab.figure(bgcolor=(1.0, 1.0, 1.0), fgcolor=(0.0, 0.0, 0.0))
 mlab.points3d([x_op[0]], [x_op[1]], [x_op[2]], [0.1], color=(0.0, 0.0, 0.0), scale_factor=0.2)
@@ -29,7 +34,7 @@ mlab.quiver3d(x_op[0], x_op[1], x_op[2],
               v3[0], v3[1], v3[2], color=cool_colors["red"], 
               line_width=4, mode="arrow", scale_factor=0.15)
 #mlab.text(1.2, 1.2, "v_1", z=1.2)
-mlab.contour3d(X1, X2, X3, M, colormap="viridis", opacity=0.5, contours=8, vmin=0.0)
+c = mlab.contour3d(X1, X2, X3, M, colormap="viridis", opacity=0.4, contours=8, vmin=0.0)
+mlab.colorbar(c, title="m [g/g]", orientation="vertical")
 mlab.axes(xlabel=labels[contaminants[0]], ylabel=labels[contaminants[1]], zlabel=labels[contaminants[2]])
-mlab.colorbar(title="m [g/g]", orientation="vertical")
 mlab.show()
