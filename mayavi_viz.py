@@ -1,7 +1,8 @@
 from mayavi import mlab
 import numpy as np
+import sys
 
-mof = "Co-MOF-74"
+mof = sys.argv[1]
 contaminants = ['N2', 'CO2', 'C2H6']
 labels = {'N2': 'nitrogen', 'CO2': 'carbon dioxide', 'C2H6': 'ethane'}
 cool_colors = {'green': (0.0, 0.716, 0.554), 'red': (1.0, 0.403, 0.397), 'blue': (0.0, 0.747, 1.0), "yellow": (0.830929, 0.793470, 0.225663), "purple": (0.745987, 0.663119, 1.000000)}
@@ -38,5 +39,8 @@ mlab.quiver3d(x_op[0], x_op[1], x_op[2],
 c = mlab.contour3d(X1, X2, X3, M, colormap="viridis", opacity=0.25, contours=8, vmin=0.0)
 mlab.colorbar(c, title="m [g/g]", orientation="vertical")
 mlab.axes(xlabel=labels[contaminants[0]], ylabel=labels[contaminants[1]], zlabel=labels[contaminants[2]])
-mlab.view(0, 45)
+mlab.view(0.0, 0.0)
+mlab.pitch(float(sys.argv[2]))
+mlab.roll(float(sys.argv[3]))
+mlab.yaw(float(sys.argv[4]))
 mlab.show()
