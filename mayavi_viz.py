@@ -53,7 +53,7 @@ mlab.yaw(-45.0)
 x = np.linspace(0.0, np.max(X1))
 x_z = np.zeros_like(x)
 for i in range(3):
-    mlab.plot3d(*[np.linspace(0.0, np.max(X1), 3) if i == j else np.zeros(3) for j in range(3)], line_width=0.01,tube_radius=0.001)
+    mlab.plot3d(*[np.linspace(0.0, np.max(X1), 3) if i == j else np.zeros(3) for j in range(3)], line_width=0.02,tube_radius=0.002)
 #mlab.text3d(1.05 * np.max(X1), 0.0, 0.0, contaminants[1], scale=0.025)
 orientations = [(0.0, -45.0, 0.0), (0.0, -45.0, 0.0), (0.0, -45.0, 0.0)]
 for i in range(3):
