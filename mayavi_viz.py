@@ -41,10 +41,6 @@ mlab.quiver3d(x_op[0], x_op[1], x_op[2],
 c = mlab.contour3d(X1, X2, X3, M, colormap="viridis", opacity=0.25, contours=8, vmin=0.0)
 mlab.colorbar(c, title="m [g/g]", orientation="vertical")
 mlab.outline(c)
-mlab.axes(
-xlabel="",  ylabel="", zlabel="", z_axis_visibility=False, x_axis_visibility=False
-#xlabel=labels[contaminants[0]], ylabel=labels[contaminants[1]], zlabel=labels[contaminants[2]]
-)
 mlab.view(0.0, 0.0)
 mlab.pitch(-10.0)
 # mlab.roll(15.0)
@@ -54,6 +50,11 @@ x = np.linspace(0.0, np.max(X1))
 x_z = np.zeros_like(x)
 for i in range(3):
     mlab.plot3d(*[np.linspace(0.0, np.max(X1), 3) if i == j else np.zeros(3) for j in range(3)], line_width=0.02,tube_radius=0.002)
+    if i == 1:
+        mlab.axes(
+            xlabel="",  ylabel="", zlabel="", z_axis_visibility=False, x_axis_visibility=False
+        #xlabel=labels[contaminants[0]], ylabel=labels[contaminants[1]], zlabel=labels[contaminants[2]]
+        )
 #mlab.text3d(1.05 * np.max(X1), 0.0, 0.0, contaminants[1], scale=0.025)
 orientations = [(0.0, -45.0, 0.0), (0.0, -45.0, 0.0), (0.0, -45.0, 0.0)]
 for i in range(3):
