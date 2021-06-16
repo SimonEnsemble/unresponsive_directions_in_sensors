@@ -39,7 +39,7 @@ mlab.quiver3d(x_op[0], x_op[1], x_op[2],
               line_width=4, mode="arrow", scale_factor=0.15)
 #mlab.text(1.2, 1.2, "v_1", z=1.2)
 c = mlab.contour3d(X1, X2, X3, M, colormap="viridis", opacity=0.25, contours=8, vmin=0.0)
-mlab.colorbar(c, title="m [g/g]", orientation="vertical")
+mlab.colorbar(c, title="m [g/g]\n", orientation="vertical")
 mlab.outline(c)
 mlab.view(0.0, 0.0)
 mlab.pitch(-10.0)
